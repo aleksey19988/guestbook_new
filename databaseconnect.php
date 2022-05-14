@@ -7,3 +7,5 @@ try {
 } catch (PDOException $pe) {
     die("Could not connect to the database $dbname :" . $pe->getMessage());
 }
+
+return $conn;
