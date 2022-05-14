@@ -1,6 +1,6 @@
 <?php
 
-$host = 'localhost';
-$username = 'root';
-$password = '';
-$dbname = 'guestbook';
+const HOST = "localhost";
+const USERNAME = 'root';
+const PASSWORD = '';
+const DBNAME = 'guestbook';

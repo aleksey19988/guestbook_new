@@ -1,10 +1,11 @@
 <?php
+require_once 'DBconnect.php';
 
 class Comment
 {
     private string $userName;
     private string $email;
-    private string $homePage;
+    private string $homepage;
     private string $text;
     private string $ipAddress;
     private string $browser;
@@ -19,11 +20,11 @@ class Comment
      * @param string $browser
      * @param string $dateAdded
      */
-    public function __construct(string $userName, string $email, string $homePage, string $text, string $ipAddress, string $browser, string $dateAdded)
+    public function __construct(string $userName, string $email, string $homepage, string $text, string $ipAddress, string $browser, string $dateAdded)
     {
         $this->userName = $userName;
         $this->email = $email;
-        $this->homePage = $homePage;
+        $this->homepage = $homepage;
         $this->text = $text;
         $this->ipAddress = $ipAddress;
         $this->browser = $browser;
@@ -100,5 +101,11 @@ class Comment
     public function getDateAdded(): string
     {
         return $this->dateAdded;
+    }
+
+    public function saveCommentToDB() {
+        $connection = DBconnect::connectToDB();
+        $query = "INSERT INTO comments (name, email, homepage, text, ip_address, user_browser, date_added) VALUES ('$this->userName', '.$this->email', '$this->homepage', '$this->text', '$this->ipAddress', '$this->browser', '$this->dateAdded')";
+        return $connection->query($query);
     }
 }

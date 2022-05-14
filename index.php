@@ -32,23 +32,23 @@
             </div>
         </nav>
         <div class="container">
-            <form>
+            <form action="saveCommentToDB.php" method="POST">
                 <div class="mb-3">
                     <label for="inputUserName" class="form-label">User Name<span class="required-input-tag">*</span></label>
-                    <input type="text" class="form-control" id="inputUserName" required>
+                    <input type="text" class="form-control" id="inputUserName" name="userName" required>
                 </div>
                 <div class="mb-3">
                     <label for="inputEmail" class="form-label">Email address<span class="required-input-tag">*</span></label>
-                    <input type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp" required>
+                    <input type="email" class="form-control" id="inputEmail" name="email" aria-describedby="emailHelp" required>
                     <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                 </div>
                 <div class="mb-3">
                     <label for="inputHomepage" class="form-label">Homepage</label>
-                    <input type="url" placeholder="https://example.com" pattern="https://.*" class="form-control" id="inputHomepage">
+                    <input type="url" placeholder="https://example.com" pattern="https://.*" class="form-control" id="inputHomepage" name="homepage">
                 </div>
                 <div class="mb-3">
                     <label for="inputText" class="form-label">Text<span class="required-input-tag">*</span></label>
-                    <input type="text" class="form-control" id="inputText" required>
+                    <input type="text" class="form-control" id="inputText" name="text" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
