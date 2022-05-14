@@ -3,4 +3,4 @@
 $host = 'localhost';
 $username = 'root';
 $password = '';
-$dbName = 'guestbook';
+$dbname = 'guestbook';
