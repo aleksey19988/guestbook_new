@@ -11,3 +11,9 @@
 .form-content {
     margin-top: 50px;
 }
+
+.page-button {
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin: 0 5px;
+}

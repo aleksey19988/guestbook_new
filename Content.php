@@ -13,19 +13,34 @@ class Content
         return $connection->query($query)->fetchAll();
     }
 
-    public function getCommentsWithPaging($page = 1): array
+    public function getCommentsWithPaging($page = 1, $parameter = null, $direction = null): array
     {
+        $parameter = $_GET['sort'] ?? false;
+        $direction = $_GET['direction'] ?? false;
         $page = $_GET['page'] ?? $page;
         $offset = ($page > 1) ? $this->commentsCountOnPage * ($page - 1) : 0;
 
         $connection = DBconnect::connectToDB();
-        $query = "SELECT * FROM comments LIMIT {$offset}, {$this->commentsCountOnPage}";
+
+        if ($parameter && $direction) {
+            $query = "SELECT * FROM comments ORDER BY {$parameter} {$direction} LIMIT {$offset}, {$this->commentsCountOnPage}";
+        } else {
+            $query = "SELECT * FROM comments LIMIT {$offset}, {$this->commentsCountOnPage}";
+        }
 
         return $connection->query($query)->fetchAll();
     }
 
-    public function showTableHead()
+    public function showTableHead($sortedDirection = null)
     {
+        $sortedFields = ['name', 'email', 'date_added'];
+
+        if ($sortedDirection === null || $sortedDirection === 'DESC') {
+            $sortedDirection = 'ASC';
+        } elseif ($sortedDirection === 'ASC') {
+            $sortedDirection = 'DESC';
+        }
+
         $thead = '';
         $connection = DBconnect::connectToDB();
         $tableHead = $connection->query('SHOW COLUMNS FROM comments')->fetchAll();
@@ -33,7 +48,11 @@ class Content
         foreach ($tableHead as $elem) {
             foreach ($elem as $key => $value) {
                 if ($key === 'Field') {
-                    $thead .= "<th scope='col'>{$value}</th>";
+                    if (in_array($value, $sortedFields)) {
+                        $thead .= "<th scope='col'><a href=?sort={$value}&direction={$sortedDirection}>{$value}</a></th>";
+                    } else {
+                        $thead .= "<th scope='col'>{$value}</th>";
+                    }
                 }
             }
         }
@@ -43,9 +62,11 @@ class Content
 
     public function showComments()
     {
+        $this->showTableHead($_GET['direction']);
+
         $comments = $this->getCommentsWithPaging();
-//        $counter = ($_GET['page'] * $this->commentsCountOnPage) ?? 1;
         $counter = ($_GET['page'] == 1 || $_GET['page'] === null) ? 1 : (($_GET['page'] - 1) * $this->commentsCountOnPage + 1);
+
         foreach ($comments as $comment) {
             $row = "<td>$counter</td>";
             foreach ($comment as $key => $value) {

@@ -57,7 +57,7 @@ $content = new Content();
     </div>
     <div class="container table-content">
         <table class="table table-hover">
-            <?php $content->showTableHead(); ?>
+<!--            --><?php //$content->showTableHead(); ?>
             <?php $content->showComments(); ?>
         </table>
     </div>

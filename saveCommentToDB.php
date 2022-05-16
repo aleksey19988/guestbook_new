@@ -4,11 +4,11 @@ require_once 'Comment.php';
 if (isset($_POST['userName'])
     && isset($_POST['email'])
     && isset($_POST['text'])
-    ) {
+) {
     $userName = $_POST['userName'];
     $email = $_POST['email'];
     $text = $_POST['text'];
-    $homePage = $_POST['homepage'] ? $_POST['homepage'] : '';
+    $homePage = $_POST['homepage'] ?: '';
     $ipAddress = $_SERVER['REMOTE_ADDR'];
     $browser = $_SERVER['HTTP_USER_AGENT'];
     $dateTime = new DateTime('now');
