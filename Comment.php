@@ -103,11 +103,12 @@ class Comment
         return $this->dateAdded;
     }
 
-    public function saveCommentToDB() {
+    public function saveCommentToDB(): bool
+    {
         $connection = DBconnect::connectToDB();
-        $query = "INSERT INTO comments (name, email, homepage, text, ip_address, user_browser, date_added) VALUES ('$this->userName', '.$this->email', '$this->homepage', '$this->text', '$this->ipAddress', '$this->browser', '$this->dateAdded')";
+        $query = "INSERT INTO comments (name, email, homepage, text, user_browser, ip_address, date_added) VALUES ('$this->userName', '.$this->email', '$this->homepage', '$this->text', '$this->browser', '$this->ipAddress', '$this->dateAdded')";
         $result = $connection->query($query);
 
-        return !(($result === false));
+        return $result !== false;
     }
 }

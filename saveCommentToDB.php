@@ -10,7 +10,7 @@ if (isset($_POST['userName'])
     $text = $_POST['text'];
     $homePage = $_POST['homepage'] ? $_POST['homepage'] : '';
     $ipAddress = $_SERVER['REMOTE_ADDR'];
-    $browser = get_browser($_SERVER['HTTP_USER_AGENT'], true) ? get_browser($_SERVER['HTTP_USER_AGENT'], true)['browser'] : $_SERVER['HTTP_USER_AGENT'];
+    $browser = $_SERVER['HTTP_USER_AGENT'];
     $dateTime = new DateTime('now');
     $dateAdded = $dateTime->format('Y-m-d');
 
@@ -18,13 +18,11 @@ if (isset($_POST['userName'])
 
     $result = $comment->saveCommentToDB();
 
-    if ($result) {
-        header('./');
-    } else {
-        print_r('Ошибка при сохранении данных в БД');
-        sleep(5);
+    if (!$result) {
+        //TODO Добавить отображение ошибки если данные не записались в БД. Сейчас не работает alert() из-за редиректа
         header('Location: ./');
     }
+    header('Location: ./');
 } else {
     print_r('Заполнены не все обязательные поля');
 }
