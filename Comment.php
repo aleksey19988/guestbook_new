@@ -14,7 +14,7 @@ class Comment
     /**
      * @param string $userName
      * @param string $email
-     * @param string $homePage
+     * @param string $homepage
      * @param string $text
      * @param string $ipAddress
      * @param string $browser
@@ -39,7 +39,7 @@ class Comment
         return [
             'userName' => $this->userName,
             'email' => $this->email,
-            'homePage' => $this->homePage,
+            'homePage' => $this->homepage,
             'text' => $this->text,
             'ipAddress' => $this->ipAddress,
             'browser' => $this->browser,
@@ -68,7 +68,7 @@ class Comment
      */
     public function getHomePage(): string
     {
-        return $this->homePage;
+        return $this->homepage;
     }
 
     /**
@@ -106,6 +106,8 @@ class Comment
     public function saveCommentToDB() {
         $connection = DBconnect::connectToDB();
         $query = "INSERT INTO comments (name, email, homepage, text, ip_address, user_browser, date_added) VALUES ('$this->userName', '.$this->email', '$this->homepage', '$this->text', '$this->ipAddress', '$this->browser', '$this->dateAdded')";
-        return $connection->query($query);
+        $result = $connection->query($query);
+
+        return !(($result === false));
     }
 }

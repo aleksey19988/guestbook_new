@@ -6,3 +6,8 @@
 .required-input-tag {
     color: red;
 }
+
+.table-content,
+.form-content {
+    margin-top: 50px;
+}

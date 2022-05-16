@@ -1,5 +1,7 @@
 <?php
+include_once 'Content.php';
 
+$content = new Content();
 ?>
 <!doctype html>
 <html lang="en">
@@ -31,7 +33,7 @@
                 </div>
             </div>
         </nav>
-        <div class="container">
+        <div class="container form-content">
             <form action="saveCommentToDB.php" method="POST">
                 <div class="mb-3">
                     <label for="inputUserName" class="form-label">User Name<span class="required-input-tag">*</span></label>
@@ -52,6 +54,12 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+        </div>
+        <div class="container table-content">
+            <table class="table table-hover">
+                <?php $content->showTableHead(); ?>
+                <?php $content->showComments(); ?>
+            </table>
         </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
     </body>
