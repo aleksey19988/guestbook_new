@@ -13,7 +13,7 @@ class Content
         return $connection->query($query)->fetchAll();
     }
 
-    public function getCommentsWithPaging($page = 1, $sortParameter = null, $direction = null): array
+    public function getSortedComments($page = 1, $sortParameter = null, $direction = null): array
     {
         $sortParameter = htmlspecialchars($_GET['sort']) ?? false;
         $direction = htmlspecialchars($_GET['direction']) ?? false;
@@ -28,6 +28,14 @@ class Content
         } else {
             $query = "SELECT * FROM comments LIMIT {$offset}, {$this->commentsCountOnPage}";
         }
+
+        return $connection->query($query)->fetchAll();
+    }
+
+    public function getFilteredComments($searchParameter, $searchValue): array
+    {
+        $connection = DBconnect::connectToDB();
+        $query = "SELECT * FROM comments WHERE {$searchParameter} LIKE '%{$searchValue}%'";
 
         return $connection->query($query)->fetchAll();
     }
@@ -77,11 +85,15 @@ class Content
     {
         $this->showTableHead(htmlspecialchars($_GET['direction']));
 
-        $comments = $this->getCommentsWithPaging($_GET['page'], $_GET['sort'], $_GET['direction']);
-        $counter = ($_GET['page'] == 1 || $_GET['page'] === null) ? 1 : ((htmlspecialchars($_GET['page']) - 1) * $this->commentsCountOnPage + 1);
+        if ($_GET['search-parameter'] && $_GET['search-value']) {
+            $comments = $this->getFilteredComments($_GET['search-parameter'], $_GET['search-value']);
+        } else {
+            $comments = $this->getSortedComments($_GET['page'], $_GET['sort'], $_GET['direction']);
+        }
+        $rowNum = ($_GET['page'] == 1 || $_GET['page'] === null) ? 1 : ((htmlspecialchars($_GET['page']) - 1) * $this->commentsCountOnPage + 1);
 
         foreach ($comments as $comment) {
-            $row = "<td>$counter</td>";
+            $row = "<td>$rowNum</td>";
             foreach ($comment as $key => $value) {
                 if ($key === 'id') {
                     continue;
@@ -90,7 +102,7 @@ class Content
                 }
             }
             print_r("<tr>{$row}</tr>");
-            $counter++;
+            $rowNum++;
         }
     }
 
@@ -129,4 +141,5 @@ class Content
             }
         }
     }
+
 }

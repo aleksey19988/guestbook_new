@@ -61,7 +61,7 @@ $content = new Content();
         <form action="searchComments.php" class="search-form" method="get">
             <div class="form-group mb-3">
                 <label for="inputState">Parameter</label>
-                <select id="inputState" class="form-control">
+                <select id="inputState" class="form-control" name="search-parameter">
                     <?php $content->showSearchParameters(); ?>
                 </select>
             </div>
@@ -69,9 +69,8 @@ $content = new Content();
                 <label for="search-value" class="form-label">Value<span class="required-input-tag">*</span></label>
                 <input type="text" class="form-control" id="search-value" name="search-value" required>
             </div>
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button">Search</button>
-            </div>
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+            <a href="./" class="reset-filter-link"><button class="btn btn-outline-secondary" type="button">Reset filter</button></a>
         </form>
     </div>
     <div class="container table-content">
