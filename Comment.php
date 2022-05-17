@@ -106,7 +106,7 @@ class Comment
     public function saveCommentToDB(): bool
     {
         $connection = DBconnect::connectToDB();
-        $query = "INSERT INTO comments (name, email, homepage, text, user_browser, ip_address, date_added) VALUES ('$this->userName', '.$this->email', '$this->homepage', '$this->text', '$this->browser', '$this->ipAddress', '$this->dateAdded')";
+        $query = "INSERT INTO comments (name, email, homepage, text, user_browser, ip_address, date_added) VALUES ('$this->userName', '$this->email', '$this->homepage', '$this->text', '$this->browser', '$this->ipAddress', '$this->dateAdded')";
         $result = $connection->query($query);
 
         return $result !== false;

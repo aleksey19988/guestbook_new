@@ -13,17 +13,17 @@ class Content
         return $connection->query($query)->fetchAll();
     }
 
-    public function getCommentsWithPaging($page = 1, $parameter = null, $direction = null): array
+    public function getCommentsWithPaging($page = 1, $sortParameter = null, $direction = null): array
     {
-        $parameter = $_GET['sort'] ?? false;
+        $sortParameter = $_GET['sort'] ?? false;
         $direction = $_GET['direction'] ?? false;
         $page = $_GET['page'] ?? $page;
         $offset = ($page > 1) ? $this->commentsCountOnPage * ($page - 1) : 0;
 
         $connection = DBconnect::connectToDB();
 
-        if ($parameter && $direction) {
-            $query = "SELECT * FROM comments ORDER BY {$parameter} {$direction} LIMIT {$offset}, {$this->commentsCountOnPage}";
+        if ($sortParameter && $direction) {
+            $query = "SELECT * FROM comments ORDER BY {$sortParameter} {$direction} LIMIT {$offset}, {$this->commentsCountOnPage}";
         } else {
             $query = "SELECT * FROM comments LIMIT {$offset}, {$this->commentsCountOnPage}";
         }
@@ -64,7 +64,7 @@ class Content
     {
         $this->showTableHead($_GET['direction']);
 
-        $comments = $this->getCommentsWithPaging();
+        $comments = $this->getCommentsWithPaging($_GET['page'], $_GET['sort'], $_GET['direction']);
         $counter = ($_GET['page'] == 1 || $_GET['page'] === null) ? 1 : (($_GET['page'] - 1) * $this->commentsCountOnPage + 1);
 
         foreach ($comments as $comment) {
@@ -83,12 +83,23 @@ class Content
 
     public function getPagesCount(): int
     {
-        $pagesCount = ceil(count($this->getAllComments()) / $this->commentsCountOnPage);
+        return ceil(count($this->getAllComments()) / $this->commentsCountOnPage);
+    }
+
+    public function showPagesLinks($pagesCount)
+    {
+        $pagesCount = $this->getPagesCount();
+        $sortParameter = $_GET['sort'] ?? false;
+        $direction = $_GET['direction'] ?? false;
 
         for ($i = 1; $i <= $pagesCount; $i++) {
-            print_r("<a href=?page={$i}><button class='page-button'>{$i}</button></a>");
-        }
+            if ($sortParameter && $direction) {
+                $link = "<a href=?page={$i}&sort={$sortParameter}&direction={$direction}><button class='page-button'>{$i}</button></a>";
+            } else {
+                $link = "<a href=?page={$i}><button class='page-button'>{$i}</button></a>";
+            }
 
-        return $pagesCount;
+            print_r($link);
+        }
     }
 }
