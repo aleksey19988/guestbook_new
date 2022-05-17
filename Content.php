@@ -15,9 +15,10 @@ class Content
 
     public function getCommentsWithPaging($page = 1, $sortParameter = null, $direction = null): array
     {
-        $sortParameter = $_GET['sort'] ?? false;
-        $direction = $_GET['direction'] ?? false;
+        $sortParameter = htmlspecialchars($_GET['sort']) ?? false;
+        $direction = htmlspecialchars($_GET['direction']) ?? false;
         $page = $_GET['page'] ?? $page;
+        settype($page, "integer");
         $offset = ($page > 1) ? $this->commentsCountOnPage * ($page - 1) : 0;
 
         $connection = DBconnect::connectToDB();
@@ -37,7 +38,7 @@ class Content
 
         if ($sortedDirection === null || $sortedDirection === 'DESC') {
             $sortedDirection = 'ASC';
-        } elseif ($sortedDirection === 'ASC') {
+        } else {
             $sortedDirection = 'DESC';
         }
 
@@ -62,10 +63,10 @@ class Content
 
     public function showComments()
     {
-        $this->showTableHead($_GET['direction']);
+        $this->showTableHead(htmlspecialchars($_GET['direction']));
 
         $comments = $this->getCommentsWithPaging($_GET['page'], $_GET['sort'], $_GET['direction']);
-        $counter = ($_GET['page'] == 1 || $_GET['page'] === null) ? 1 : (($_GET['page'] - 1) * $this->commentsCountOnPage + 1);
+        $counter = ($_GET['page'] == 1 || $_GET['page'] === null) ? 1 : ((htmlspecialchars($_GET['page']) - 1) * $this->commentsCountOnPage + 1);
 
         foreach ($comments as $comment) {
             $row = "<td>$counter</td>";
@@ -89,8 +90,8 @@ class Content
     public function showPagesLinks($pagesCount)
     {
         $pagesCount = $this->getPagesCount();
-        $sortParameter = $_GET['sort'] ?? false;
-        $direction = $_GET['direction'] ?? false;
+        $sortParameter = htmlspecialchars($_GET['sort']) ?? false;
+        $direction = htmlspecialchars($_GET['direction']) ?? false;
 
         for ($i = 1; $i <= $pagesCount; $i++) {
             if ($sortParameter && $direction) {

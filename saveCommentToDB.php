@@ -5,10 +5,10 @@ if (isset($_POST['userName'])
     && isset($_POST['email'])
     && isset($_POST['text'])
 ) {
-    $userName = $_POST['userName'];
-    $email = $_POST['email'];
-    $text = $_POST['text'];
-    $homePage = $_POST['homepage'] ?: '';
+    $userName = htmlspecialchars($_POST['userName']);
+    $email = htmlspecialchars($_POST['email']);
+    $text = htmlspecialchars($_POST['text']);
+    $homePage = htmlspecialchars($_POST['homepage']) ?: '';
     $ipAddress = $_SERVER['REMOTE_ADDR'];
     $browser = $_SERVER['HTTP_USER_AGENT'];
     $dateTime = new DateTime('now');
