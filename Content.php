@@ -4,6 +4,7 @@ require_once 'DBconnect.php';
 class Content
 {
     private int $commentsCountOnPage = 5;
+    private array $canceledColumns = ['id', 'ip_address', 'user_browser', 'path_to_file'];
 
     public function getAllComments(): array
     {
@@ -42,14 +43,17 @@ class Content
 
     public function getColumnsHeads(): array
     {
-        $result = [];
+        $result = ['id'];
         $connection = DBconnect::connectToDB();
         $columns = $connection->query('SHOW COLUMNS FROM comments')->fetchAll();
+        $canceledColumns = $this->canceledColumns;
 
         foreach ($columns as $elem) {
             foreach ($elem as $key => $value) {
                 if ($key === 'Field') {
-                    $result[] = $value;
+                    if (!in_array($value, $canceledColumns)) {
+                        $result[] = $value;
+                    }
                 }
             }
         }
@@ -84,7 +88,7 @@ class Content
     public function showComments()
     {
         $this->showTableHead(htmlspecialchars($_GET['direction']));
-
+        $canceledColumns = $this->canceledColumns;
         if ($_GET['search-parameter'] && $_GET['search-value']) {
             $comments = $this->getFilteredComments($_GET['search-parameter'], $_GET['search-value']);
         } else {
@@ -95,7 +99,7 @@ class Content
         foreach ($comments as $comment) {
             $row = "<td>$rowNum</td>";
             foreach ($comment as $key => $value) {
-                if ($key === 'id') {
+                if (in_array($key, $canceledColumns)) {
                     continue;
                 } elseif (gettype($key) === 'string') {
                     $row .= "<td>$value</td>";

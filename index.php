@@ -5,13 +5,13 @@ $content = new Content();
 ?>
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Guestbook</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-        <link rel="stylesheet" href="style/style.css">
-    </head>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Guestbook</title>
+    <link rel="stylesheet" href="style/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
     <body>
     <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
@@ -35,7 +35,7 @@ $content = new Content();
     </nav>
     <div class="container form-content">
         <h3>Input form</h3>
-        <form action="saveCommentToDB.php" method="POST">
+        <form action="saveCommentToDB.php" method="POST" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="inputUserName" class="form-label">User Name<span class="required-input-tag">*</span></label>
                 <input type="text" class="form-control" id="inputUserName" name="userName" required>
@@ -52,6 +52,10 @@ $content = new Content();
             <div class="mb-3">
                 <label for="inputText" class="form-label">Text<span class="required-input-tag">*</span></label>
                 <input type="text" class="form-control" id="inputText" name="text" required>
+            </div>
+            <div class="mb-3">
+                <input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
+                <input type="file" class="form-control-file" id="file-input" name="file-input">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
