@@ -17,12 +17,13 @@ if (isset($_POST['userName'])
     $comment = new Comment($userName, $email, $homePage, $text, $ipAddress, $browser, $dateAdded);
 
     $result = $comment->saveCommentToDB();
-
+    var_dump($result);
     if (!$result) {
         //TODO Добавить отображение ошибки если данные не записались в БД. Сейчас не работает alert() из-за редиректа
-        header('Location: ./');
+        header('Location: ./404/404.html');
+    } else {
+        header('Location: ./success.html');
     }
-    header('Location: ./');
 } else {
     print_r('Заполнены не все обязательные поля');
 }

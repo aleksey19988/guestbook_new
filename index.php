@@ -69,8 +69,8 @@ $content = new Content();
                 <label for="search-value" class="form-label">Value<span class="required-input-tag">*</span></label>
                 <input type="text" class="form-control" id="search-value" name="search-value" required>
             </div>
-            <button class="btn btn-outline-secondary" type="submit">Search</button>
-            <a href="./" class="reset-filter-link"><button class="btn btn-outline-secondary" type="button">Reset filter</button></a>
+            <button class="btn btn-primary" type="submit">Search</button>
+            <a href="./" class="reset-filter-link"><button class="btn btn-primary" type="button">Reset filter</button></a>
         </form>
     </div>
     <div class="container table-content">
