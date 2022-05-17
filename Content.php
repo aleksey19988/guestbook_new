@@ -108,7 +108,11 @@ class Content
 
     public function getPagesCount(): int
     {
-        return ceil(count($this->getAllComments()) / $this->commentsCountOnPage);
+        if ($_GET['search-parameter'] && $_GET['search-value']) {
+            return ceil(count($this->getFilteredComments($_GET['search-parameter'], $_GET['search-value'])) / $this->commentsCountOnPage);
+        } else {
+            return ceil(count($this->getAllComments()) / $this->commentsCountOnPage);
+        }
     }
 
     public function showPagesLinks($pagesCount)
@@ -116,12 +120,30 @@ class Content
         $pagesCount = $pagesCount ?? $this->getPagesCount();
         $sortParameter = htmlspecialchars($_GET['sort']) ?? false;
         $direction = htmlspecialchars($_GET['direction']) ?? false;
+        $searchParameter = htmlspecialchars($_GET['search-parameter']) ?? false;
+        $searchValue = htmlspecialchars($_GET['search-value']) ?? false;
+        $currentPage = null;
+
+        if ($_GET['page'] == null || $_GET['page'] == 1) {
+            $currentPage = 1;
+        } else {
+            $currentPage = $_GET['page'];
+        }
 
         for ($i = 1; $i <= $pagesCount; $i++) {
-            if ($sortParameter && $direction) {
-                $link = "<a href=?page={$i}&sort={$sortParameter}&direction={$direction}><button class='page-button'>{$i}</button></a>";
-            } else {
-                $link = "<a href=?page={$i}><button class='page-button'>{$i}</button></a>";
+            $currentPageClass = ($currentPage == $i) ? 'current-page' : '';
+            if ($searchParameter
+                && $searchValue
+                && $sortParameter
+                && $direction) {
+                $link = "<a href=?page={$i}&sort={$sortParameter}&direction={$direction}&search-parameter={$searchParameter}&search-value={$searchValue}><button class='page-button {$currentPageClass}'>{$i}</button></a>";
+            } elseif ($sortParameter && $direction) {
+                $link = "<a href=?page={$i}&sort={$sortParameter}&direction={$direction}><button class='page-button {$currentPageClass}'>{$i}</button></a>";
+            } elseif ($searchParameter && $searchValue) {
+                $link = "<a href=?page={$i}&search-parameter={$searchParameter}&search-value={$searchValue}><button class='page-button {$currentPageClass}'>{$i}</button></a>";
+            }
+            else {
+                $link = "<a href=?page={$i}><button class='page-button {$currentPageClass}'>{$i}</button></a>";
             }
 
             print_r($link);

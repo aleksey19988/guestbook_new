@@ -111,5 +111,4 @@ class Comment
 
         return $prepare->execute([$this->userName, $this->email, $this->homepage, $this->text, $this->browser, $this->ipAddress, $this->dateAdded]);
     }
-
 }
