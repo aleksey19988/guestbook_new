@@ -138,54 +138,105 @@ class Comment
         $fileExt = $fileData['ext'];
         if (in_array($fileExt, $this->acceptImgFormats)) {
             $imageSize = $this->getImageSize();
-
+            print_r($fileData['size']);
             if ($fileData['size'] > 1000000) {
-                $errors[] = "Слишком большой вес картинки (max 1 MB)!\n";
+                $size = round($fileData['size'] / 1000000, 2);
+                $errors[] = "Максимальный вес картинки может составлять не более 1 МБ (вес текущей картинки - {$size} МБ)!";
             }
             if ($imageSize['height'] > 240) {
-                $errors[] = "Слишком высокая картинка (высота превышает допустимую 240px)!\n";
+                $height = $imageSize['height'];
+                $errors[] = "Максимальная высота картинки может составлять 240px (высота текущей картинки составляет {$height}px)!";
             }
             if ($imageSize['width'] > 320) {
-                $errors[] = "Слишком широкая картинка (ширина превышает допустимую 320px)!\n";
+                $width = $imageSize['width'];
+                $errors[] = "Максимальная ширина картинки может составлять 320px (ширина текущей картинки составляет {$width}px)!";
             }
 
         } elseif (in_array($fileExt, $this->acceptFileFormats)) {
             if ($fileData['size'] > 100000) {
-                $errors[] = "Слишком большой текстовый файл (max 100 KB)!\n";
+                $errors[] = "Слишком большой текстовый файл (max 100 KB)!";
             }
         } else {
-            $errors[] = 'Недопустимый формат файла!\n';
+            $errors[] = "Недопустимый формат файла!";
         }
 
         return $errors;
     }
 
-    public function saveCommentToDB(): bool
+    public function saveCommentToDB(): array
     {
-
         $connection = DBconnect::connectToDB();
-        //Проверяем на соответствие вложенный файл
-        $fileErrors = $this->checkFile($this->getFileData());
 
-        if (empty($fileErrors)) {
-            //Подготовили запрос
-            $query = "INSERT INTO comments (name, email, homepage, text, user_browser, ip_address, date_added, path_to_file) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            $prepare = $connection->prepare($query);
+        if (!empty($this->getFileData())) {
+            //Проверяем на соответствие вложенный файл
+            $fileErrors = $this->checkFile($this->getFileData());
 
-            //Сохраняем файл в папке files
-            $fileDirectory = $this->getFileDirectory();
-            $currentDirectory = $_SERVER['DOCUMENT_ROOT'];
-            $fileName = $this->getFileData()['name'];
-            $moveFileResult = move_uploaded_file($this->getFileData()['tmp'], "$currentDirectory/$fileDirectory/$fileName");
+            if (empty($fileErrors)) {
+                //Подготовили запрос
+                $query = "INSERT INTO comments (name, email, homepage, text, user_browser, ip_address, date_added, path_to_file) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                $prepare = $connection->prepare($query);
 
-            //Сохраняем данные в БД
-            if ($moveFileResult) {
-                return $prepare->execute([$this->getUserName(), $this->getEmail(), $this->getHomePage(), $this->getText(), $this->getBrowser(), $this->getIpAddress(), $this->getDateAdded(), "$currentDirectory/$fileDirectory/$fileName"]);
+                //Сохраняем файл в папке files
+                $fileDirectory = $this->getFileDirectory();
+                $currentDirectory = $_SERVER['DOCUMENT_ROOT'];
+                $fileName = $this->getFileData()['name'];
+
+                $moveFileResult = move_uploaded_file($this->getFileData()['tmp'], "$currentDirectory/$fileDirectory/$fileName");
+
+                //Сохраняем данные в БД
+                if ($moveFileResult) {
+                    $savedStatus = $prepare->execute([$this->getUserName(), $this->getEmail(), $this->getHomePage(), $this->getText(), $this->getBrowser(), $this->getIpAddress(), $this->getDateAdded(), "$currentDirectory/$fileDirectory/$fileName"]);
+                    if ($savedStatus) {
+                        return [
+                            'saveStatus' => true,
+                            'errors' => []
+                        ];
+                    } else {
+                        return [
+                            'saveStatus' => false,
+                            'errors' => ['Ошибка сохранения данных в БД. Проверьте запросы/настройки БД (в форме был прикреплённый файл)'],
+                        ];
+                    }
+                } else {
+                    return [
+                        'saveStatus' => false,
+                        'errors' => ['Ошибка сохранения файла в файловую систему. Проверьте запросы/пути сохранения файла'],
+                    ];
+                }
             } else {
-                return false;
+                return [
+                    'saveStatus' => false,
+                    'errors' => $fileErrors,
+                ];
             }
         } else {
-            //TODO Реализовать отображение ошибок с прикрепленным файлом
+            //Подготовили запрос
+            $query = "INSERT INTO comments (name, email, homepage, text, user_browser, ip_address, date_added, path_to_file) VALUES (:name, :email, :homepage, :text, :user_browser, :ip_address, :date_added, :path_to_file)";
+            $prepare = $connection->prepare($query);
+            var_dump($prepare);
+            $savedStatus = $prepare->execute(array(
+                    ':name' => $this->getUserName(),
+                    ':email' => $this->getEmail(),
+                    ':homepage' => $this->getHomePage(),
+                    ':text' => $this->getText(),
+                    ':user_browser' => $this->getBrowser(),
+                    ':ip_address' => $this->getIpAddress(),
+                    ':date_added' => $this->getDateAdded(),
+                    ':path_to_file' => '',
+                )
+            );
+            var_dump($savedStatus);
+            if ($savedStatus) {
+                return [
+                    'saveStatus' => true,
+                    'errors' => []
+                ];
+            } else {
+                return [
+                    'saveStatus' => false,
+                    'errors' => ['Ошибка сохранения данных в БД. Проверьте запросы/настройки БД (файл в форме отсутствовал)'],
+                ];
+            }
         }
     }
 }

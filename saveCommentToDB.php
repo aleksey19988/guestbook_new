@@ -30,16 +30,24 @@ if (isset($_POST['userName'])
         // 0 - когда файл успешно загружен во временную директорию, 4 - когда файл не был прикреплён при отправке формы
         $errorCode = $fileData['error'];
         print_r("Ошибка при загрузке файла. Код ошибки: {$errorCode}\n");
+        print_r("<a href='https://www.php.net/manual/ru/features.file-upload.errors.php' class='reset-filter-link' target='_blank'><button class='btn btn-primary' type='button'>Документация</button></a>");
+        print_r("<a href='./' class='reset-filter-link'><button class='btn btn-primary' type='button'>Вернуться на главную</button></a>");
         die();
     }
 
     $comment = new Comment($userName, $email, $homePage, $text, $ipAddress, $browser, $dateAdded, $processedFileData);
 
     $result = $comment->saveCommentToDB();
-    var_dump($result);
-    if (!$result) {
+
+    if (!$result['saveStatus']) {
         //TODO Добавить отображение ошибки если данные не записались в БД.
-        header('Location: ./404/404.html');
+        $errorsForRequest = [];
+        for ($i = 0; $i < count($result['errors']); $i++) {
+            $errorValue = $result['errors'][$i];
+            $errorsForRequest[] = "error{$i}=$errorValue";
+        }
+        $errorsInStr = implode('&', $errorsForRequest);
+        header("Location: ./404/404.php?$errorsInStr");
     } else {
         header('Location: ./success.html');
     }
