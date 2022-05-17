@@ -8,7 +8,8 @@
 }
 
 .table-content,
-.form-content {
+.form-content,
+.search-content {
     margin-top: 50px;
 }
 
@@ -16,4 +17,8 @@
     border: 1px solid gray;
     border-radius: 5px;
     margin: 0 5px;
+}
+
+.page-list {
+    margin-bottom: 50px;
 }

@@ -32,6 +32,23 @@ class Content
         return $connection->query($query)->fetchAll();
     }
 
+    public function getColumnsHeads(): array
+    {
+        $result = [];
+        $connection = DBconnect::connectToDB();
+        $columns = $connection->query('SHOW COLUMNS FROM comments')->fetchAll();
+
+        foreach ($columns as $elem) {
+            foreach ($elem as $key => $value) {
+                if ($key === 'Field') {
+                    $result[] = $value;
+                }
+            }
+        }
+
+        return $result;
+    }
+
     public function showTableHead($sortedDirection = null)
     {
         $sortedFields = ['name', 'email', 'date_added'];
@@ -43,18 +60,13 @@ class Content
         }
 
         $thead = '';
-        $connection = DBconnect::connectToDB();
-        $tableHead = $connection->query('SHOW COLUMNS FROM comments')->fetchAll();
+        $tableHead = $this->getColumnsHeads();
 
         foreach ($tableHead as $elem) {
-            foreach ($elem as $key => $value) {
-                if ($key === 'Field') {
-                    if (in_array($value, $sortedFields)) {
-                        $thead .= "<th scope='col'><a href=?sort={$value}&direction={$sortedDirection}>{$value}</a></th>";
-                    } else {
-                        $thead .= "<th scope='col'>{$value}</th>";
-                    }
-                }
+            if (in_array($elem, $sortedFields)) {
+                $thead .= "<th scope='col'><a href=?sort={$elem}&direction={$sortedDirection}>{$elem}</a></th>";
+            } else {
+                $thead .= "<th scope='col'>{$elem}</th>";
             }
         }
 
@@ -89,7 +101,7 @@ class Content
 
     public function showPagesLinks($pagesCount)
     {
-        $pagesCount = $this->getPagesCount();
+        $pagesCount = $pagesCount ?? $this->getPagesCount();
         $sortParameter = htmlspecialchars($_GET['sort']) ?? false;
         $direction = htmlspecialchars($_GET['direction']) ?? false;
 
@@ -101,6 +113,20 @@ class Content
             }
 
             print_r($link);
+        }
+    }
+
+    public function showSearchParameters()
+    {
+        $parameters = $this->getColumnsHeads();
+        $disableParameters = ['id'];
+
+        foreach($parameters as $elem) {
+            if (in_array($elem, $disableParameters)) {
+                continue;
+            } else {
+                print_r("<option value={$elem} name={$elem}>$elem</option>");
+            }
         }
     }
 }
