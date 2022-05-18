@@ -9,8 +9,8 @@ $content = new Content();
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Guestbook</title>
-    <link rel="stylesheet" href="style/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="style/style.css">
 </head>
     <body>
     <nav class="navbar navbar-expand-lg bg-light">
@@ -35,27 +35,29 @@ $content = new Content();
     </nav>
     <div class="container form-content">
         <h3>Input form</h3>
-        <form action="saveCommentToDB.php" method="POST" enctype="multipart/form-data">
-            <div class="mb-3">
+        <form action="#" method="POST" enctype="multipart/form-data" id="form" class="form-body">
+            <div class="mb-3 form__item">
                 <label for="inputUserName" class="form-label">User Name<span class="required-input-tag">*</span></label>
-                <input type="text" class="form-control" id="inputUserName" name="userName" required>
+                <input type="text" class="form-input form-control _required" id="inputUserName" name="userName" >
             </div>
-            <div class="mb-3">
+            <div class="mb-3 form__item">
                 <label for="inputEmail" class="form-label">Email address<span class="required-input-tag">*</span></label>
-                <input type="email" class="form-control" id="inputEmail" name="email" aria-describedby="emailHelp" required>
+                <input type="email" class="form-input form-control _required _email" id="inputEmail" name="email" aria-describedby="emailHelp" >
                 <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 form__item">
                 <label for="inputHomepage" class="form-label">Homepage</label>
-                <input type="url" placeholder="https://example.com" pattern="https://.*" class="form-control" id="inputHomepage" name="homepage">
+                <input type="url" placeholder="https://example.com" value="https://" class="form-input form-control _homepage" id="inputHomepage" name="homepage">
             </div>
-            <div class="mb-3">
+            <div class="mb-3 form__item">
                 <label for="inputText" class="form-label">Text<span class="required-input-tag">*</span></label>
-                <input type="text" class="form-control" id="inputText" name="text" required>
+                <input type="text" class="form-input form-control _required" id="inputText" name="text" >
             </div>
-            <div class="mb-3">
+            <div class="mb-3 form__item file__item">
                 <input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
-                <input type="file" class="form-control-file" id="file-input" name="file-input">
+                <input type="file" accept="image/jpeg, image/gif, image/png, text/plain" class="form-control-file" id="file-input" name="file-input">
+                <button for="file-input" type="button" class="btn btn-primary file-input-btn">Выберите файл</button>
+                <div id="file-preview" class="file-preview"></div>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
@@ -88,5 +90,6 @@ $content = new Content();
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <script src="sendForm.js"></script>
     </body>
 </html>

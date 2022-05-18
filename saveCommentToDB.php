@@ -46,10 +46,12 @@ if (isset($_POST['userName'])
             $errorValue = $result['errors'][$i];
             $errorsForRequest[] = "error{$i}=$errorValue";
         }
-        $errorsInStr = implode('&', $errorsForRequest);
-        header("Location: ./404/404.php?$errorsInStr");
+//        $errorsInStr = implode('&', $errorsForRequest);
+//        header("Location: ./404/404.php?$errorsInStr");
+        echo json_encode(array('result' => false, 'errors' => $errorsForRequest));
     } else {
-        header('Location: ./success.html');
+//        header('Location: ./success.html');
+        echo json_encode(array('result' => true));
     }
 } else {
     print_r('Заполнены не все обязательные поля');
