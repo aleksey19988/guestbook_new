@@ -1,5 +1,7 @@
 "use strict"
 
+import {addInputError, removeInputError} from "./colorErrorInputs";
+
 document.addEventListener('DOMContentLoaded', function() {
     const acceptFileFormats = {
         images: ["image/jpeg", "image/gif", "image/png"],
@@ -22,8 +24,8 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             form.classList.add('_sending');
             let response = await fetch('saveCommentToDB.php', {
-                method: 'POST',
-                body: formData,
+               method: 'POST',
+               body: formData,
             });
 
             if (response.ok) {
@@ -39,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     }
-    // Проверяем на соответствие требованиями поля формы
+    // Проверяем на соответствие требованиям поля формы
     function validateForm(form) {
         let errorsCount = 0;
         let requiredFields = document.querySelectorAll('._required');
@@ -68,16 +70,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         return errorsCount;
     }
-    // Функция для выделения цветом невалидного поля
-    function addInputError(input) {
-        input.parentElement.classList.add('_error');
-        input.classList.add('_error');
-    }
-    // Функция для удаления класса "ошибка" с поля ввода
-    function removeInputError(input) {
-        input.parentElement.classList.remove('_error');
-        input.classList.remove('_error');
-    }
 
     function testEmail(input) {
         return !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,8})+$/.test(input.value);
@@ -92,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const filePreview = document.getElementById('file-preview');
 
     fileInput.addEventListener('change', () => {
-        uploadFile(fileInput.files[0]);
+       uploadFile(fileInput.files[0]);
     });
 
     function uploadFile(file) {

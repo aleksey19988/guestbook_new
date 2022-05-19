@@ -215,14 +215,14 @@ class Comment
             $prepare = $connection->prepare($query);
             var_dump($prepare);
             $savedStatus = $prepare->execute(array(
-                    ':name' => $this->getUserName(),
-                    ':email' => $this->getEmail(),
-                    ':homepage' => $this->getHomePage(),
-                    ':text' => $this->getText(),
-                    ':user_browser' => $this->getBrowser(),
-                    ':ip_address' => $this->getIpAddress(),
-                    ':date_added' => $this->getDateAdded(),
-                    ':path_to_file' => '',
+                ':name' => $this->getUserName(),
+                ':email' => $this->getEmail(),
+                ':homepage' => $this->getHomePage(),
+                ':text' => $this->getText(),
+                ':user_browser' => $this->getBrowser(),
+                ':ip_address' => $this->getIpAddress(),
+                ':date_added' => $this->getDateAdded(),
+                ':path_to_file' => '',
                 )
             );
             var_dump($savedStatus);

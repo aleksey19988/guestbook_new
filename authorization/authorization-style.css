@@ -1,0 +1,12 @@
+.navbar a {
+    color: #262626;
+}
+
+#navbarNav {
+    display: flex;
+    justify-content: space-between;
+}
+
+.required-input-tag {
+    color: red;
+}

@@ -3,6 +3,10 @@
     justify-content: space-between;
 }
 
+.nav-item {
+    margin: 0 5px;
+}
+
 .required-input-tag {
     color: red;
 }
@@ -71,6 +75,11 @@
 
 .file-input-btn {
     display: inline-flex;
+}
+
+.table tr td a {
+    /*text-decoration: none;*/
+    color: #262626;
 }
 
 .page-button {

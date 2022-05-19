@@ -98,11 +98,12 @@ class Content
 
         foreach ($comments as $comment) {
             $row = "<td>$rowNum</td>";
+            $elemId = $comment['id'];
             foreach ($comment as $key => $value) {
                 if (in_array($key, $canceledColumns)) {
                     continue;
                 } elseif (gettype($key) === 'string') {
-                    $row .= "<td>$value</td>";
+                    $row .= "<td><a href=/update-row?id={$elemId}>$value</a></td>";
                 }
             }
             print_r("<tr>{$row}</tr>");
