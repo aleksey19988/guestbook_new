@@ -7,6 +7,15 @@
     margin: 0 5px;
 }
 
+.user-greeting-item-list {
+    display: flex;
+    align-items: center;
+}
+
+.user-greeting{
+    margin: 0;
+}
+
 .required-input-tag {
     color: red;
 }
@@ -75,6 +84,14 @@
 
 .file-input-btn {
     display: inline-flex;
+}
+
+.file-delete-btn-display-none {
+    display: none;
+}
+
+.file-delete-btn-display-block {
+    display: inline-block;
 }
 
 .table tr td a {

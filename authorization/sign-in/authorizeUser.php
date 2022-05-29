@@ -10,9 +10,9 @@ $email = filter_var(trim($_POST['email']));
 $password = filter_var(trim($_POST['password']));
 
 $result = $authorization->authorizeUser($email, $password);
-var_dump($result);
 if ($result === null) {
     print_r('Пользователь не найден!');
+    header('Location ./sign-in.php');
 } else {
     setcookie('userId', $result['id'], 0, '/');
     setcookie('userName', $result['name'], 0, '/');

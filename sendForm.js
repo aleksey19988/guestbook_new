@@ -1,6 +1,6 @@
 "use strict"
 
-import {addInputError, removeInputError} from "./colorErrorInputs";
+import {addInputError, removeInputError} from "./colorErrorInputs.js";
 
 document.addEventListener('DOMContentLoaded', function() {
     const acceptFileFormats = {
@@ -112,6 +112,10 @@ document.addEventListener('DOMContentLoaded', function() {
         //Отображаем preview
         let reader = new FileReader();
         reader.onload = function (e) {
+            // Отображаем кнопку "Удалить"
+            let deleteFileBtn = document.getElementById('delete-file-button');
+            deleteFileBtn.classList.remove("file-delete-btn-display-none");
+            deleteFileBtn.classList.add("file-delete-btn-display-block");
             if (acceptFileFormats.images.includes(file.type)) {
                 filePreview.innerHTML = `<img src="${e.target.result}" alt="Photo" class="preview-image">`;
             } else {
@@ -124,4 +128,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         reader.readAsDataURL(file);
     }
+
+    // Алгоритм удаления файла и превью
+    const deleteFileBtn = document.getElementById("delete-file-button");
+
+    deleteFileBtn.addEventListener('click', () => {
+        // Убираем отображение кнопки "Удалить файл"
+        let deleteFileBtn = document.getElementById('delete-file-button');
+        deleteFileBtn.classList.remove("file-delete-btn-display-block");
+        deleteFileBtn.classList.add("file-delete-btn-display-none");
+
+        // Прячем содержимое превью файла
+        filePreview.innerHTML = ``;
+
+        // Очищаем значение input-а
+        fileInput.value = '';
+    });
 });

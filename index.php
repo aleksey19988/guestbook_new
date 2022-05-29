@@ -1,6 +1,7 @@
 <?php
 include_once 'Content.php';
 $content = new Content();
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -28,12 +29,12 @@ $content = new Content();
                     </li>
                 </ul>
                 <?php else: ?>
-                <ul class="navbar-nav authorization-buttons">
-                    <li>
-                        <p>Привет, <?php echo $_COOKIE["userName"] ?>!</p>
+                <ul class="navbar-nav authorization-buttons authorized-user-list">
+                    <li class="user-greeting-item-list">
+                        <p class="user-greeting">Привет, <?php echo $_COOKIE["userName"] ?>!</p>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Выйти</a>
+                        <a class="nav-link active" aria-current="page" href="./authorization/sign-out.php">Выйти</a>
                     </li>
                 </ul>
                 <?php endif; ?>
@@ -60,12 +61,13 @@ $content = new Content();
                 <label for="inputText" class="form-label">Text<span class="required-input-tag">*</span></label>
                 <input type="text" class="form-input form-control _required" id="inputText" name="text" >
             </div>
-            <div class="mb-3 form__item file__item">
+            <div class="mb-3 form__item file__item" id="file__item">
                 <input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
                 <input type="file" accept="image/jpeg, image/gif, image/png, text/plain" class="form-control-file" id="file-input" name="file-input">
                 <button for="file-input" type="button" class="btn btn-primary file-input-btn">Выберите файл</button>
                 <div id="file-preview" class="file-preview"></div>
             </div>
+            <button type="button" class="btn btn-primary file-delete-btn-display-none" id="delete-file-button">Удалить файл</button>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
@@ -97,6 +99,6 @@ $content = new Content();
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-    <script src="sendForm.js"></script>
+    <script type="module" src="sendForm.js"></script>
     </body>
 </html>
