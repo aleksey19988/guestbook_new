@@ -103,7 +103,7 @@ class Content
                 if (in_array($key, $canceledColumns)) {
                     continue;
                 } elseif (gettype($key) === 'string') {
-                    $row .= "<td><a href=/update-row?id={$elemId}>$value</a></td>";
+                    $row .= "<td><a href=/update-row.php?id={$elemId}>$value</a></td>";
                 }
             }
             print_r("<tr>{$row}</tr>");
@@ -167,6 +167,24 @@ class Content
                 print_r("<option value={$elem} name={$elem}>$elem</option>");
             }
         }
+    }
+
+    public function getCommentById($id): array
+    {
+        $connection = DBconnect::connectToDB();
+        $allFields = $connection->query("SELECT * FROM comments WHERE id = '$id'")->fetch(PDO::FETCH_ASSOC);
+        $result = [];
+
+        // Поля, которые пользователь должен увидеть
+        $acceptedWatchFields = ['id', 'name', 'email', 'homepage', 'text'];
+
+        foreach($allFields as $key => $value) {
+            if (in_array($key, $acceptedWatchFields)) {
+                $result[$key] = $value;
+            }
+        }
+
+        return $result;
     }
 
 }
